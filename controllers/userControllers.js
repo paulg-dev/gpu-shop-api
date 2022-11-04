@@ -55,16 +55,14 @@ module.exports.loginUser = (reqBody) =>{
 
 // Update user as admin
 
-module.exports.updateToAdmin = async (req, res) => {
+module.exports.updateToAdmin = async (userId, res) => {
 
     // const userId = req.params.id
 
-    const userToUpdate = await User.findOne({_id: userId})
+    const userToUpdate = await User.findById(userId)
         .then((result, error) => {
             if (error) {
-                return res.send({
-                    error: 'Server error'
-                });
+                return 'Server error'
             }
 
             if (result == null) {
@@ -74,27 +72,25 @@ module.exports.updateToAdmin = async (req, res) => {
     });
 
     if (userToUpdate == null) {
-        return res.send({
-            error: 'User not Found'
-        });
+        return 'User not Found'
     }
 
     if (userToUpdate.isAdmin) {
-        return res.send({
-            error: 'User is already admin'
-        });
+        return 'User is already admin'
     }
 
-    return User.findByIdAndUpdate(userId, {isAdmin: true}).then((result, error) => {
+    return User.findByIdAndUpdate(userId).then((result, error) => {
     
         if (error) {
-            return res.send({
-                error: 'Update Error'
-            })
+            return 'Update Error'
         }
-
-        return result;
+        result.isAdmin = true;
+        return result.save().then((isAdmin,error)=>{
+        	if (error) {
+            	return 'Update Error'
+       		} else {
+        		return isAdmin;
+        	}
+        })
     });
 }
-
-

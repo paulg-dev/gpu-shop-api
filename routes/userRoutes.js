@@ -26,8 +26,11 @@ router.post("/login",(req,res)=>{
 // Route for updating user as admin
 
 
-router.put("/updateAdmin/:id", auth.verify,(req,res)=>{
-	userController.updateToAdmin(req.body).then(resultFromController=>res.send(resultFromController));
+router.put("/updateAdmin/:id", auth.verify, (req,res)=>{
+
+	const userData = auth.decode(req.headers.authorization);
+
+	userController.updateToAdmin(req.params.id, req.body).then(resultFromController=>res.send(resultFromController));
 });
 
 

@@ -26,7 +26,7 @@ module.exports.verify = (req,res,next)=>{
 	let token = req.headers.authorization;
 
 	if (typeof token !== "undefined"){
-		console.log(token);
+		// console.log(token);
 		token = token.slice(7, token.length);
 
 		return jwt.verify(token,secret,(err,data)=>{
