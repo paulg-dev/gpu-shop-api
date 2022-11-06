@@ -16,7 +16,7 @@
 
 ### Features Overview:
 
-##### `For user:`
+#### `For user:`
 *   [x] User registration
 	*   [ ] Empty required fields error return
 	*   [x] Duplicate email checking
@@ -65,4 +65,4 @@
 
 ### Acknowledgements
 * [Zuitt Learning Institute](https://zuitt.co/)
-* [README Template](https://gitlab.com/kopino4-templates/readme-template)
+* ![README Template](https://gitlab.com/kopino4-templates/readme-template)
