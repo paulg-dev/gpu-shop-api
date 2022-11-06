@@ -16,7 +16,7 @@
 
 ### Features Overview:
 
-#### `For user:`
+#### `For Regular User:`
 *   [x] User registration
 	*   [ ] Empty required fields error return
 	*   [x] Duplicate email checking
@@ -44,7 +44,7 @@
 *   [ ] Subtotal for each item
 *   [ ] Total price for all items
 
-#### `For admin:`
+#### `For Admin User:`
 *   [x] Set user as admin
 	*   [x] User not found error return
 	*   [x] User is already admin error return
@@ -65,4 +65,4 @@
 
 ### Acknowledgements
 * [Zuitt Learning Institute](https://zuitt.co/)
-* ![README Template](https://gitlab.com/kopino4-templates/readme-template)
+* [README Template](https://gitlab.com/kopino4-templates/readme-template)
