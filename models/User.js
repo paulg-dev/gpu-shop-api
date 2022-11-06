@@ -5,23 +5,23 @@ const mongoose = require ("mongoose");
 const userSchema = new mongoose.Schema({
         firstName: {
             type: String,
-            required: [true, "Please enter your first name."]
+            required: [true, "First name has not been entered."]
         },
         lastName: {
             type: String,
-            required: [true, "Please enter your last name."]
+            required: [true, "Last name has not been entered."]
         },
         email: {
             type: String,
-            required: [true, "Please enter your email address."]
+            required: [true, "Email has not been entered."]
         },
         password: {
             type: String,
-            required: [true, "Please enter your passowrd."]
+            required: [true, "Password has not been entered."]
         },
         mobileNo: {
             type: String,
-            required: [true, "Please enter your mobile number."]
+            required: [true, "Mobile number has not been entered."]
         },
         isAdmin: {
             type: Boolean,

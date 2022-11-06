@@ -11,24 +11,34 @@ const auth = require("../auth");
 // User Registration
 
 
-module.exports.registerUser = (reqBody, res) => {
+module.exports.registerUser = (reqBody) => {
 
-	let newUser = new User({
-		firstName : reqBody.firstName,
-		lastName : reqBody.lastName,
-		password : bcrypt.hashSync(reqBody.password,10),
-		email : reqBody.email.toLowerCase(),
-		mobileNo : reqBody.mobileNo
-		
-	})
+	return User.find({email:reqBody.email.toLowerCase()}).then(result=>{
 
-	return newUser.save().then((user,error)=>{
-		if (error) {
-			res.send ({
-				error: "Registration Failed"
-			});
+		if (result.length>0) {
+
+			return 'Registration failed. \n \n Email address has already been used.';
+
 		} else {
-			return newUser;
+			
+			let newUser = new User ({
+
+				firstName : reqBody.firstName,
+				lastName : reqBody.lastName,
+				password : bcrypt.hashSync(reqBody.password,10),
+				email : reqBody.email.toLowerCase(),
+				mobileNo : reqBody.mobileNo
+		
+			})
+
+			return newUser.save().then((user,error)=>{
+				if (error) {
+					return 'Registration failed.'
+				} else {
+					return 'Registration successful with the following details: \n \n'  + user;
+				};
+			});
+
 		};
 	});
 };

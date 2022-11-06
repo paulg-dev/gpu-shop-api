@@ -33,5 +33,5 @@ app.use("/orders", orderRoutes);
 
 
 app.listen(process.env.PORT || 4000,()=>{
-	console.log(`API is now online on port ${process.env.PORT||4000}`)
+	console.log(`Your E-Commerce API is now online on port ${process.env.PORT||4000}`)
 })
