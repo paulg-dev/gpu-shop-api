@@ -16,7 +16,18 @@
 
 ### Features Overview:
 
-#### `For Regular User:`
+#### `A. For Admin User`
+*   [x] Set user as admin
+	*   [x] User not found error return
+	*   [x] User is already admin error return
+*   [x] Create Product
+	*   [x] Display product details upon successful registration
+*   [x] Update Product information
+*   [x] Archive Product
+*   [x] Make Product Available
+*   [ ] Retrieve all orders
+
+#### `B. For Regular User`
 *   [x] User registration
 	*   [ ] Empty required fields error return
 	*   [x] Duplicate email checking
@@ -31,29 +42,18 @@
 	*   [ ] Wrong password error return
 *   [x] Retrieve all products
 *   [x] Retrieve all active products
-*   [ ] Retrieve a single product
+*   [x] Retrieve a single product
 *   [ ] Non-admin User checkout (Create Order)
 *   [ ] Retrieve authenticated user’s orders
-*   [ ] Retrieve User Details 
+*   [x] Retrieve User Details 
 
-#### `Cart Features:`
+#### `C. Cart Features`
 *   [ ] Add to Cart
 *   [ ] View Added Products
 *   [ ] Change product quantities
 *   [ ] Remove products from cart 
 *   [ ] Subtotal for each item
 *   [ ] Total price for all items
-
-#### `For Admin User:`
-*   [x] Set user as admin
-	*   [x] User not found error return
-	*   [x] User is already admin error return
-*   [x] Create Product
-	*   [x] Display product details upon successful registration
-*   [x] Update Product information
-*   [x] Archive Product
-*   [x] Make Product Available
-*   [ ] Retrieve all orders
 
 
 ### Tools Used

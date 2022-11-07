@@ -105,3 +105,13 @@ module.exports.updateToAdmin = async (userId, res) => {
         })
     });
 }
+
+
+// Retrieve user details
+
+module.exports.getProfile = (reqBody) =>{
+	return User.findById(reqBody.id).then(result=>{
+			result.password = "";
+			return result;
+	});
+};

@@ -34,5 +34,13 @@ router.put("/updateAdmin/:id", auth.verify, (req,res)=>{
 });
 
 
+// Route for retreiving user details
+
+router.get("/profile",(req,res)=>{
+
+	userController.getProfile(req.body).then(resultFromController=>res.send(resultFromController));
+});
+
+
 
 module.exports = router;
