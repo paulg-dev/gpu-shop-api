@@ -50,9 +50,9 @@
 	*   [x] User is already admin error return
 *   [x] Create Product
 	*   [x] Display product details upon successful registration
-*   [ ] Update Product information
-*   [ ] Archive Product
-*   [ ] Make Product Available
+*   [x] Update Product information
+*   [x] Archive Product
+*   [x] Make Product Available
 *   [ ] Retrieve all orders
 
 
