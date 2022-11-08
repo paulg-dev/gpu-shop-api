@@ -29,13 +29,18 @@ module.exports.registerUser = (reqBody) => {
 				email : reqBody.email.toLowerCase(),
 				mobileNo : reqBody.mobileNo
 		
-			})
+			});
 
 			return newUser.save().then((user,error)=>{
 				if (error) {
-					return 'Registration failed.'
+					return false;
 				} else {
-					return 'Registration successful with the following details: \n \n'  + user;
+					const output = {
+							'alert!' : 'Registration successful with the following details:',
+							'>' : user
+
+					}
+					return output ;
 				};
 			});
 
@@ -50,14 +55,20 @@ module.exports.registerUser = (reqBody) => {
 
 module.exports.loginUser = (reqBody) =>{
 	return User.findOne({email:reqBody.email}).then(result=>{
-		if (result==null) {
-			return false;
+		if (result == null) {
+			return 'User with this email is not registered.';
 		} else {
 			const isPasswordCorrect = bcrypt.compareSync(reqBody.password,result.password);
 			if (isPasswordCorrect) {
-				return {access: auth.createAccessToken(result)}
+				
+				const output = {
+					'alert' : `Now logged in as ${result.firstName} ${result.lastName}. Your access token is:`,
+					'>' : `${auth.createAccessToken(result)}`
+				}
+				return output;
+
 			} else {
-				return false
+				return 'Password is incorrect.';
 			};
 		};
 	});

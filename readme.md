@@ -22,6 +22,8 @@
 	*   [x] User is already admin error return
 *   [x] Create Product
 	*   [x] Display product details upon successful registration
+	*   [x] Product already registered error return
+	*   [x] Empty required fields error return
 *   [x] Update Product information
 *   [x] Archive Product
 *   [x] Make Product Available
@@ -38,8 +40,8 @@
 *   [x] User authentication
 	*   [x] Display access token
 	*   [ ] Empty required fields error return
-	*   [ ] Email not registered error return
-	*   [ ] Wrong password error return
+	*   [x] Email not registered error return
+	*   [x] Wrong password error return
 *   [x] Retrieve all products
 *   [x] Retrieve all active products
 *   [x] Retrieve a single product

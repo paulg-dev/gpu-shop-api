@@ -12,13 +12,13 @@ const auth = require("../auth");
 
 router.post("/",(req,res)=>{
 	userController.registerUser(req.body).then(resultFromController=>res.send(
-		resultFromController));
+		resultFromController)).catch(errorFromController=>res.send(errorFromController));
 })
 
 // Route for user login
 
 router.post("/login",(req,res)=>{
-	userController.loginUser(req.body).then(resultFromController=>res.send(resultFromController));
+	userController.loginUser(req.body).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
 });
 
 
@@ -30,7 +30,7 @@ router.put("/updateAdmin/:id", auth.verify, (req,res)=>{
 
 	const userData = auth.decode(req.headers.authorization);
 
-	userController.updateToAdmin(req.params.id, req.body).then(resultFromController=>res.send(resultFromController));
+	userController.updateToAdmin(req.params.id, req.body).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
 });
 
 
@@ -38,7 +38,7 @@ router.put("/updateAdmin/:id", auth.verify, (req,res)=>{
 
 router.get("/profile",(req,res)=>{
 
-	userController.getProfile(req.body).then(resultFromController=>res.send(resultFromController));
+	userController.getProfile(req.body).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
 });
 
 
