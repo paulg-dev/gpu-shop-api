@@ -27,7 +27,7 @@
 *   [x] Update Product information
 *   [x] Archive Product
 *   [x] Make Product Available
-*   [ ] Retrieve all orders
+*   [x] Retrieve all orders
 
 #### `B. For Regular User`
 *   [x] User registration
@@ -45,8 +45,8 @@
 *   [x] Retrieve all products
 *   [x] Retrieve all active products
 *   [x] Retrieve a single product
-*   [ ] Non-admin User checkout (Create Order)
-*   [ ] Retrieve authenticated user’s orders
+*   [x] Non-admin User checkout (Create Order)
+*   [x] Retrieve authenticated user’s orders
 *   [x] Retrieve User Details 
 
 #### `C. Cart Features`
@@ -54,7 +54,7 @@
 *   [ ] View Added Products
 *   [ ] Change product quantities
 *   [ ] Remove products from cart 
-*   [ ] Subtotal for each item
+*   [x] Subtotal for each item
 *   [ ] Total price for all items
 
 

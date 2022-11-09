@@ -6,7 +6,7 @@ const orderSchema = new mongoose.Schema({
         userId: {
             type: String
         },
-        totalAmount: {
+        productSubtotal: {
             type: Number
         },
         purchasedOn: {
@@ -15,7 +15,10 @@ const orderSchema = new mongoose.Schema({
         },
         products: [
             {
-                orderId: {
+                productId: {
+                   type: String,
+                }, 
+                 productName: {
                    type: String,
                 }, 
                 quantity: {

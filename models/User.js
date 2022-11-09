@@ -26,25 +26,31 @@ const userSchema = new mongoose.Schema({
         isAdmin: {
             type: Boolean,
             default: false
-        }
-        // orders: [
-        //     {
-        //         totalAmount: {
-        //            type: Number
-        //         }, 
-        //         purchasedOn: {
-        //             type: Date,
-        //             default: new Date()
-        //         },
-        //         products: [
-        //         	{
-        //         		productId: String,
-        //         		quantity: Number
-        //         	}
-
-        //         ] 
-        //     }
-        // ]
+        },
+        cart: [
+            {
+                productId: {
+                   type: String
+                }, 
+                productName: {
+                    type: String
+                },
+                price: {
+                    type: Number
+                },
+                quantity: {
+                	type: Number,
+                	default: 1
+                },
+                subTotal: {
+                    type: Number
+                },
+                addedOn: {
+                    type: Date,
+                    default: new Date()
+                }
+            }
+        ]
 });
 
 module.exports = mongoose.model("User", userSchema);

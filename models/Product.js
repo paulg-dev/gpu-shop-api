@@ -15,6 +15,10 @@ const productSchema = new mongoose.Schema({
             type: Number,
             required: [true, "Please enter the price."]
         },
+        stock: {
+            type: Number,
+            default: 1
+        },
         isActive: {
             type: Boolean,
             default: true

@@ -11,23 +11,26 @@ const auth = require("../auth");
 // User Registration
 
 
-module.exports.registerUser = (reqBody) => {
+module.exports.registerUser = (data) => {
 
-	return User.find({email:reqBody.email.toLowerCase()}).then(result=>{
+	return User.find({email:data.email.toLowerCase()}).then(result=>{
 
 		if (result.length>0) {
+			const output = {
+				'error!' : `Registration failed. Email ${data.email} has already been used`
+			}
 
-			return 'Registration failed. \n \n Email address has already been used.';
+			return output;
 
 		} else {
 			
 			let newUser = new User ({
 
-				firstName : reqBody.firstName,
-				lastName : reqBody.lastName,
-				password : bcrypt.hashSync(reqBody.password,10),
-				email : reqBody.email.toLowerCase(),
-				mobileNo : reqBody.mobileNo
+				firstName : data.firstName,
+				lastName : data.lastName,
+				password : bcrypt.hashSync(data.password,10),
+				email : data.email.toLowerCase(),
+				mobileNo : data.mobileNo
 		
 			});
 
@@ -56,19 +59,25 @@ module.exports.registerUser = (reqBody) => {
 module.exports.loginUser = (reqBody) =>{
 	return User.findOne({email:reqBody.email}).then(result=>{
 		if (result == null) {
-			return 'User with this email is not registered.';
+			const output = {
+					'error!' : 'No user with this email can be found.',
+				}
+				return output;
 		} else {
 			const isPasswordCorrect = bcrypt.compareSync(reqBody.password,result.password);
 			if (isPasswordCorrect) {
 				
 				const output = {
-					'alert' : `Now logged in as ${result.firstName} ${result.lastName}. Your access token is:`,
+					'alert!' : `Now logged in as ${result.firstName} ${result.lastName}. Your access token is:`,
 					'>' : `${auth.createAccessToken(result)}`
 				}
 				return output;
 
 			} else {
-				return 'Password is incorrect.';
+				const output = {
+					'error!' : 'Password is incorrect',
+				}
+				return output;
 			};
 		};
 	});
@@ -77,41 +86,50 @@ module.exports.loginUser = (reqBody) =>{
 
 // Update user as admin
 
-module.exports.updateToAdmin = async (userId, res) => {
+module.exports.updateToAdmin = async (data) => {
 
-    // const userId = req.params.id
-
-    const userToUpdate = await User.findById(userId)
+    const userToUpdate = await User.findById(data.params.id)
         .then((result, error) => {
             if (error) {
-                return 'Server error'
+                return 'Error'
             }
 
-            if (result == null) {
+            if (result == null) {	
                 return null;
             }
             return result
     });
 
     if (userToUpdate == null) {
-        return 'User not Found'
-    }
+        const output  = {
+        	'error!': 'User not found.'
+        }
+        return output
+    }	
 
     if (userToUpdate.isAdmin) {
-        return 'User is already admin'
+    	const output = {
+    		'error!' : `${userToUpdate.firstName} ${userToUpdate.lastName} is already an admin.`
+    	}
+        return output
     }
 
-    return User.findByIdAndUpdate(userId).then((result, error) => {
+    return User.findByIdAndUpdate(data.params.id).then((result, error) => {
     
         if (error) {
             return 'Update Error'
         }
         result.isAdmin = true;
-        return result.save().then((isAdmin,error)=>{
+        return result.save().then((nowAdmin,error)=>{
         	if (error) {
-            	return 'Update Error'
+            	return 'Error'
        		} else {
-        		return isAdmin;
+       			const output = {
+       				'alert!' : `${result.firstName} ${result.lastName} is now an admin.`,
+       				'>' : nowAdmin 
+       			}
+
+        		return output;
         	}
         })
     });
@@ -126,3 +144,62 @@ module.exports.getProfile = (reqBody) =>{
 			return result;
 	});
 };
+
+
+// Add to cart
+
+module.exports.addToCart = async (req, res) => {
+    const userId = auth.decode(request.headers.authorization).id;
+
+    let subTotal = req.body.price * req.body.quantity;
+
+    let data = {
+        productId: req.body.productId,
+        productName: req.body.productName,
+        quantity: req.body.quantity,
+        price: req.body.price,
+        subTotal: subTotal
+    };
+
+    const isUserCartUpdated = await User.findById(userId).then(user => {
+        user.userCart.push(data);
+
+        return user.save().then((result, error) => {
+            if (error) {
+                return false;
+            }
+
+            return true;
+        });
+    });
+
+    const isProductUpdated = await Product.findById(req.body.productId).then(product => {
+
+        let dbProdStocks = product.stocks;
+        let bodyProdQty = request.body.quantity;
+
+        let isOutOfStock =
+        (dbProdStocks - bodyProdQty) <= 0
+        ? true : false;
+
+        if (isOutOfStock) {
+            product.isActive = false;
+        }
+
+        product.stocks = product.stocks - request.body.quantity;
+
+        return product.save().then((result, error) => {
+            if (error) {
+                return false;
+            }
+
+            return true;
+        });
+    });
+
+    if (!(isUserCartUpdated && isProductUpdated)) {
+        return response.send(false);
+    }
+
+    return response.send(true);
+}

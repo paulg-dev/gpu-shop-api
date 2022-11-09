@@ -9,20 +9,24 @@ const auth = require("../auth");
 
 // Create Product - Admin Only
 
-module.exports.addProduct = (reqBody, res) => {
+module.exports.addProduct = (data) => {
 
-	return Product.findOne({name:reqBody.product.name}).then(result=>{
+	return Product.findOne({name:data.product.name}).then(result=>{
 		//  console.log(result);
 		if (result !== null){
-			return 'Registration failed. \n \n Product with similar name already registered.';	
+			const output = {
+				'error!': 'Registration failed. Product with similar name already registered.'
+			}
+			return output;	
 		} else {
 
-			if (reqBody.isAdmin) {
+			if (data.isAdmin) {
 
 				let newProduct = new Product({
-					name : reqBody.product.name,
-					description : reqBody.product.description,
-					price : reqBody.product.price
+					name : data.product.name,
+					description : data.product.description,
+					price : data.product.price,
+					stock : data.product.stock
 				});
 
 				// console.log(newProduct);
@@ -106,13 +110,16 @@ module.exports.getProduct = (reqParams) => {
 // Update a product
 
 module.exports.updateProduct = (data) => {
+
 	if (data.isAdmin) {
 
 		let updateInfo = {
 			name: data.product.name,
 			description: data.product.description,
-			price: data.product.price
+			price: data.product.price,
+			stock : data.product.stock
 		};
+
 
 		return Product.findByIdAndUpdate(data.params.productId, updateInfo).then((product,error)=>{
 			
@@ -123,15 +130,19 @@ module.exports.updateProduct = (data) => {
 				return product.save().then((updatedProduct) => {
 
 					const output = {
-						'alert!' : `Product ${product.name} has been updated.`,
-						'>' : updatedProduct
-					}
+						'alert!' : `Product ${product.name} has been updated with the following detail/s:`,
+						'>' : updateInfo,
+						// '<' : updatedProduct
+					};
+
 					return output;
 				});				
 			};
 			
 		});
-	};
+	} else {
+		return 'Error';
+	}
 };
 
 
