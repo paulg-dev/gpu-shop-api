@@ -25,6 +25,7 @@
 	*   [x] Product already registered error return
 	*   [x] Empty required fields error return
 *   [x] Update Product information
+	*   [ ] Automatically update product info of items already in user's carts
 *   [x] Archive Product
 *   [x] Make Product Available
 *   [x] Retrieve all orders
@@ -50,12 +51,16 @@
 *   [x] Retrieve User Details 
 
 #### `C. Cart Features`
-*   [ ] Add to Cart
-*   [ ] View Added Products
-*   [ ] Change product quantities
+*   [x] Add to Cart
+		*   [x] Limit quantity to available stocks
+*   [x] View Added Products
+*   [x] Change product quantities
+		*   [ ] Execute remove from cart if quantity is set to zero
+		*   [ ] Limit changing of quantity to available stocks
 *   [ ] Remove products from cart 
 *   [x] Subtotal for each item
-*   [ ] Total price for all items
+*   [x] Total price for all items
+		*   [ ] Declare and Save totalAmount in database
 
 
 ### Tools Used

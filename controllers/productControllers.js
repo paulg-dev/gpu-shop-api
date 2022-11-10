@@ -26,7 +26,7 @@ module.exports.addProduct = (data) => {
 					name : data.product.name,
 					description : data.product.description,
 					price : data.product.price,
-					stock : data.product.stock
+					stocks : data.product.stocks
 				});
 
 				// console.log(newProduct);
@@ -95,7 +95,7 @@ module.exports.getProduct = (reqParams) => {
 
 		} else {
 			const output = {
-				'alert!': 'Here are your product details.',
+				'alert!': 'These are the product details:',
 				'>': result
 			}
 
@@ -117,7 +117,7 @@ module.exports.updateProduct = (data) => {
 			name: data.product.name,
 			description: data.product.description,
 			price: data.product.price,
-			stock : data.product.stock
+			stocks : data.product.stocks
 		};
 
 

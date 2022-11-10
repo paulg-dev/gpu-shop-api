@@ -7,7 +7,6 @@ const auth = require("../auth");
 
 
 
-
 // User Registration
 
 
@@ -148,58 +147,288 @@ module.exports.getProfile = (reqBody) =>{
 
 // Add to cart
 
-module.exports.addToCart = async (req, res) => {
-    const userId = auth.decode(request.headers.authorization).id;
+module.exports.addToCart = (data, res) => {
 
-    let subTotal = req.body.price * req.body.quantity;
+	const userId = data.authId;
 
-    let data = {
-        productId: req.body.productId,
-        productName: req.body.productName,
-        quantity: req.body.quantity,
-        price: req.body.price,
-        subTotal: subTotal
-    };
+	if (data.isAdmin) {
 
-    const isUserCartUpdated = await User.findById(userId).then(user => {
-        user.userCart.push(data);
+		const output = {
+			'error!' : "Admins are not allowed to add items to cart."
+		}
+		return Promise.reject(output);
 
-        return user.save().then((result, error) => {
+	} else {
+
+		return Product.findOne({name:data.product.name}).then((product, err) => {
+
+   			if (product == null) {
+   				const output = {
+   					"error!" : 'No product with this name is available.'
+   				}
+
+   				return output;
+
+
+   			} else {
+
+   				if (data.product.quantity > product.stocks) {
+   					const output = {
+   						"error!" : 'Not enough stocks.',
+   						">" : `Maximum order as of the moment is limited to ${product.stocks} pieces.`
+   					}
+
+   					return output;	
+
+   				} else {
+
+   					let subTotal = product.price * data.product.quantity;
+
+    				let toCart = {
+        				productId: product._id,
+        				productName: data.product.name,
+        				quantity:data.product.quantity,
+	        			price: product.price,
+	        			subTotal: subTotal
+
+    				};
+
+    				// console.log(toCart)
+
+    				let cartUpdate = User.findById(userId).then(user => {
+        					user.cart.push(toCart);
+
+        				let addedtoCart = user.save().then(result =>{
+
+        				// console.log(result)		 		
+
+        				})
+        			});		
+
+    				const output = {
+    					'alert!' : 'Item/s successfully added to cart.',
+    					'>' : toCart
+    				}
+        			return output;		 
+    				
+   				}
+   			}	
+
+   		});
+   	}
+}   
+
+	
+// View Cart
+
+module.exports.viewCart = (data) =>{
+
+	return User.findOne({_id:data.authId}).then(result=>{
+
+			// console.log(result.cart)
+
+			let totalAmount = 0;
+
+			result.cart.forEach(item => {
+
+				totalAmount += item.subTotal
+			})
+
+			// console.log(totalAmount)
+
+			const output = {
+				'alert!' : `Here is what's currently in your cart ${result.firstName}`,
+				'>' : result.cart,
+				'totalAmount' : totalAmount
+			}
+
+			return output;	
+			
+	});
+};
+
+
+
+// updating quantity in Cart
+
+module.exports.updateCart = async (data) =>{
+
+	const userToUpdate = await User.findOne({_id:data.authId}).then((result, error) => {
+        
+        	// console.log(data.authId)
+        	// console.log(result)   
+
             if (error) {
-                return false;
+                return 'Error'
             }
 
-            return true;
-        });
+            if (result == null) {	
+                return null;
+            }
+            return result
     });
 
-    const isProductUpdated = await Product.findById(req.body.productId).then(product => {
+    if (userToUpdate == null) {
+        const output  = {
+        	'error!': 'User not found.'
+        }
+        return output
+    }	
 
-        let dbProdStocks = product.stocks;
-        let bodyProdQty = request.body.quantity;
-
-        let isOutOfStock =
-        (dbProdStocks - bodyProdQty) <= 0
-        ? true : false;
-
-        if (isOutOfStock) {
-            product.isActive = false;
+    return User.findByIdAndUpdate(data.authId).then((result, error) => {
+    
+        if (error) {
+            return 'Update Error'
         }
 
-        product.stocks = product.stocks - request.body.quantity;
+        let toUpdate = {
+        			// productId: product._id,
+        			// productName: data.product.name,
+        			quantity: data.product.quantity,
+	        		// price: result.product.price,
+	     } 
 
-        return product.save().then((result, error) => {
-            if (error) {
-                return false;
-            }
+	     // console.log(toUpdate)
+	     // console.log(result.cart.length)
 
-            return true;
-        });
+	        for (let i = 0; i < result.cart.length; i++)
+
+	        if (data.params.productId == result.cart[i].productId) {
+
+	        	result.cart[i].quantity = data.product.quantity
+
+	        	result.cart[i].subTotal = data.product.quantity * result.cart[i].price
+	        }
+
+        return result.save().then((nowUpdated,error)=>{
+
+        	console.log(result)
+        	console.log(nowUpdated)
+
+        	if (error) {
+            	return 'Error'
+       		} else {
+       			const output = {
+       				'alert!' : `Quantity has been succesfully updated`,
+       				'>' : nowUpdated.cart 
+       			}
+
+        		return output;
+        	}
+        })
     });
 
-    if (!(isUserCartUpdated && isProductUpdated)) {
-        return response.send(false);
-    }
 
-    return response.send(true);
-}
+
+	// return User.findOne({_id:data.authId}).then(result=>{
+
+	// //  console.log(result)
+	// const userId = data.authId
+
+	// 		let toUpdate = {
+ //        			// productId: product._id,
+ //        			// productName: data.product.name,
+ //        			quantity:data.product.quantity,
+	//         		// price: result.product.price,
+	//         } 
+
+	//         console.log(toUpdate)
+	//         console.log(result.cart.length)
+
+	//         for (let i = 0; i < result.cart.length; i++)
+
+	//         if (data.params.productId == result.cart[i].productId) {
+
+	//         	result.cart[i].quantity = data.product.quantity
+	//         }
+
+	//         let cartUpdate = User.findByIdAndUpdate(resul.cart.).then(user => {
+ //        					user.cart.push(toUpdate);
+
+ //        			let addedtoCart = user.save().then(result =>{
+
+ //        				// console.log(result)		 		
+
+ //        			})
+ //        	});		
+
+	// 		let totalAmount = 0;
+
+	// 		result.cart.forEach(item => {
+
+	// 			totalAmount += item.subTotal
+	// 		})
+				
+	// 		const output = {
+	// 			'alert!' : `Quantity for has been succesfully updated`,
+	// 			'>' : result.cart,
+	// 			'totalAmount' : totalAmount
+	// 		}
+
+	// 		return output;	
+			
+	// });
+};
+
+
+// remove From Cart
+
+module.exports.removeFromCart = (data) =>{
+
+	return User.findOne({_id:data.authId}).then(result=>{
+
+			
+			let toRemove = {
+				product: ''
+			}
+
+			let totalAmount = 0;
+
+			result.cart.forEach(item => {
+
+				totalAmount += item.subTotal
+			})
+				
+			const output = {
+				'alert!' : `Has been successfully removed from your cart`,
+				'>' : result.cart,
+				'totalAmount' : totalAmount
+			}
+
+			return output;	
+			
+	});
+};
+
+
+
+// app.delete('/delete-users', (request, response) => {
+// 	// users = [];
+// 	for (let i = 0; i < users.length; i++) {
+		
+// 		if (request.body.username == users[i].username) {
+			
+// 			 users[i] = {}
+			
+// 			 message = `User ${request.body.username}'s has been deleted`
+			 
+// 			 break;
+		 
+// 		} else {
+			
+// 			message = "Users does not exist"
+// 		}
+// 		response.send(mesage);
+// };
+
+
+// function deleteFriend (friend){
+
+//         if (friendsList.indexOf(friend) === -1){
+//             alert("Friend not found");
+//         } else {
+//             let index = friendsList.indexOf(friend);
+//             friendsList.splice(index, 1);
+//             alert("You have deleted " + friend + " as a friend!");
+//         }
+//     }

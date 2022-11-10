@@ -48,11 +48,61 @@ router.get("/profile",(req,res)=>{
 
 // Route for adding product to Cart
 
-router.get("/addToCart",(req,res)=>{
+router.put("/addToCart", auth.verify, (req,res)=>{
 
-	userController.addToCart(req.body).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
+	const data = {
+		product: req.body,
+		authId: auth.decode(req.headers.authorization).id,
+		isAdmin: auth.decode(req.headers.authorization).isAdmin
+	}
+
+	userController.addToCart(data).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
 });
 
+
+// Route for viewing Cart
+
+router.get("/viewCart", auth.verify, (req,res)=>{
+
+	const data = {
+		product: req.body,
+		authId: auth.decode(req.headers.authorization).id,
+		isAdmin: auth.decode(req.headers.authorization).isAdmin
+	}
+
+	userController.viewCart(data).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
+});
+
+
+
+
+// Route for updating quantity of item in Cart
+
+router.patch("/viewCart/:productId", auth.verify, (req,res)=>{
+
+	const data = {
+		product: req.body,
+		params: req.params,
+		authId: auth.decode(req.headers.authorization).id,
+		isAdmin: auth.decode(req.headers.authorization).isAdmin
+	}
+
+	userController.updateCart(data).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
+});
+
+
+// Route for removing item from Cart
+
+router.patch("/removeFromCart", auth.verify, (req,res)=>{
+
+	const data = {
+		product: req.body,
+		authId: auth.decode(req.headers.authorization).id,
+		isAdmin: auth.decode(req.headers.authorization).isAdmin
+	}
+
+	userController.removeFromCart(data).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
+});
 
 
 module.exports = router;
