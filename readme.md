@@ -52,15 +52,15 @@
 
 #### `C. Cart Features`
 *   [x] Add to Cart
-		*   [x] Limit quantity to available stocks
+	*   [x] Limit quantity to available stocks
 *   [x] View Added Products
 *   [x] Change product quantities
-		*   [ ] Execute remove from cart if quantity is set to zero
-		*   [ ] Limit changing of quantity to available stocks
+	*   [ ] Execute remove from cart if quantity is set to zero
+	*   [ ] Limit changing of quantity to available stocks
 *   [ ] Remove products from cart 
 *   [x] Subtotal for each item
 *   [x] Total price for all items
-		*   [ ] Declare and Save totalAmount in database
+	*   [ ] Declare and Save totalAmount in database
 
 
 ### Tools Used
