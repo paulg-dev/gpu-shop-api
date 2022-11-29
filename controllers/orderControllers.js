@@ -172,7 +172,7 @@ module.exports.getUserOrders = (data) => {
 		return Promise.reject(output);
 	} else {
 
-		return Order.find({userId:data.authId}).then(allUSerOrders=>{
+		return Order.find({userId:data.authId}).then(allUserOrders=>{
 		
 		const output = {
 			'alert!': `Hi, these are your orders`,

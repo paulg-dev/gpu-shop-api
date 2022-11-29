@@ -2,6 +2,8 @@
 
 ## Project Name: Santos E-Commerce API
 
+### Hosted API Products Link:
+* [E-Commerce-API Products](https://e-commerce-api-santos.onrender.com/products)
 
 ### User Credentials:
 
@@ -24,6 +26,7 @@
 	*   [x] Display product details upon successful registration
 	*   [x] Product already registered error return
 	*   [x] Empty required fields error return
+	*   [ ] Enable multiple product creation
 *   [x] Update Product information
 	*   [ ] Automatically update product info of items already in user's carts
 *   [x] Archive Product
@@ -46,6 +49,7 @@
 *   [x] Retrieve all products
 *   [x] Retrieve all active products
 *   [x] Retrieve a single product
+	*   [ ] Enable product search using product name
 *   [x] Non-admin User checkout (Create Order)
 *   [x] Retrieve authenticated user’s orders
 *   [x] Retrieve User Details 
