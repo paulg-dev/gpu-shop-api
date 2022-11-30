@@ -7,6 +7,19 @@ const auth = require("../auth");
 
 
 
+//Check if the email already exists
+
+module.exports.checkEmailExists = (reqBody) =>{
+	return User.find({email:reqBody.email}).then(result=>{
+		if(result.length>0){
+			return true;
+		}else{
+			return false;
+		};
+	});
+};
+
+
 // User Registration
 
 
@@ -40,9 +53,9 @@ module.exports.registerUser = (data) => {
 					const output = {
 							'alert!' : 'Registration successful with the following details:',
 							'>' : user
-
 					}
-					return output ;
+					// return output ;
+					return true
 				};
 			});
 
@@ -61,22 +74,25 @@ module.exports.loginUser = (reqBody) =>{
 			const output = {
 					'error!' : 'No user with this email can be found.',
 				}
-				return output;
+				// return output;
+				return false;
 		} else {
 			const isPasswordCorrect = bcrypt.compareSync(reqBody.password,result.password);
+
 			if (isPasswordCorrect) {
 				
 				const output = {
 					'alert!' : `Now logged in as ${result.firstName} ${result.lastName}. Your access token is:`,
 					'>' : `${auth.createAccessToken(result)}`
 				}
-				return output;
-
+				// return output;
+				return {access:auth.createAccessToken(result)}
 			} else {
 				const output = {
-					'error!' : 'Password is incorrect',
+					'error!' : 'Password is incorrect'
 				}
-				return output;
+				// return output;
+				return false;
 			};
 		};
 	});
@@ -137,10 +153,11 @@ module.exports.updateToAdmin = async (data) => {
 
 // Retrieve user details
 
-module.exports.getProfile = (reqBody) =>{
-	return User.findById(reqBody.id).then(result=>{
-			result.password = "";
+module.exports.getProfile = (data) =>{
+	return User.findById(data.userId).then(result=>{
+			// result.password = "";
 			return result;
+
 	});
 };
 

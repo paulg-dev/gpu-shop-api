@@ -8,9 +8,15 @@ const auth = require("../auth");
 
 
 
+// Route for checking if the user's email already exists in the database
+router.post("/checkEmail",(req,res)=>{
+	userController.checkEmailExists(req.body).then(resultFromController=>res.send(resultFromController));
+})
+
+
 // Route for user registration
 
-router.post("/",(req,res)=>{
+router.post("/register",(req,res)=>{
 	userController.registerUser(req.body).then(resultFromController=>res.send(
 		resultFromController)).catch(errorFromController=>res.send(errorFromController));
 })
@@ -40,9 +46,19 @@ router.put("/updateAdmin/:id", auth.verify, (req,res)=>{
 
 // Route for retreiving user details
 
-router.get("/profile",(req,res)=>{
+router.get("/details", auth.verify,(req,res)=>{
 
-	userController.getProfile(req.body).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
+	const data = {
+		auth: auth.decode(req.headers.authorization),
+		userId: auth.decode(req.headers.authorization).id,
+		isAdmin: auth.decode(req.headers.authorization).isAdmin 
+	}
+
+	console.log(data.auth);
+	console.log(data.userId);
+	console.log(data.isAdmin)
+
+	userController.getProfile(data).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
 });
 
 
