@@ -144,6 +144,7 @@ module.exports.getAllOrders = (data) => {
 
 	if (data.isAdmin) {
 		return Order.find({}).then(allOrders=>{
+		// console.log(allOrders)
 		return allOrders;
 	});
 

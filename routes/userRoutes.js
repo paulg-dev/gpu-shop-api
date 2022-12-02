@@ -36,7 +36,7 @@ router.put("/updateAdmin/:id", auth.verify, (req,res)=>{
 
 	const data = {
 		params: req.params,
-		product: req.body,
+		user: req.body,
 		isAdmin: auth.decode(req.headers.authorization).isAdmin
 	}
 
@@ -44,22 +44,39 @@ router.put("/updateAdmin/:id", auth.verify, (req,res)=>{
 });
 
 
+// Route for updating admin to user
+
+router.put("/updateUser/:id", auth.verify, (req,res)=>{
+
+	const data = {
+		params: req.params,
+		user: req.body,
+		isAdmin: auth.decode(req.headers.authorization).isAdmin
+	}
+
+	userController.updateToUser(data).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
+});
+
+
+
+
 // Route for retreiving user details
 
 router.get("/details", auth.verify,(req,res)=>{
 
-	const data = {
-		auth: auth.decode(req.headers.authorization),
-		userId: auth.decode(req.headers.authorization).id,
-		isAdmin: auth.decode(req.headers.authorization).isAdmin 
-	}
+	const userData = auth.decode(req.headers.authorization);
 
-	console.log(data.auth);
-	console.log(data.userId);
-	console.log(data.isAdmin)
-
-	userController.getProfile(data).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
+	userController.getProfile({userId:userData.id}).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
 });
+
+
+// Route for retreiving all users
+
+
+router.get("/",(req,res)=>{
+	userController.getAllUsers().then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
+});
+
 
 
 // Route for adding product to Cart

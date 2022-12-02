@@ -86,7 +86,7 @@ module.exports.loginUser = (reqBody) =>{
 					'>' : `${auth.createAccessToken(result)}`
 				}
 				// return output;
-				return {access:auth.createAccessToken(result)}
+				return {access:auth.createAccessToken(result), id:result._id, isAdmin:result.isAdmin}
 			} else {
 				const output = {
 					'error!' : 'Password is incorrect'
@@ -151,11 +151,65 @@ module.exports.updateToAdmin = async (data) => {
 }
 
 
+
+// Update admin to user
+
+module.exports.updateToUser = async (data) => {
+
+    const userToUpdate = await User.findById(data.params.id)
+        .then((result, error) => {
+            if (error) {
+                return 'Error'
+            }
+
+            if (result == null) {	
+                return null;
+            }
+            return result
+    });
+
+    if (userToUpdate == null) {
+        const output  = {
+        	'error!': 'User not found.'
+        }
+        return output
+    }	
+
+    if (!userToUpdate.isAdmin) {
+    	const output = {
+    		'error!' : `${userToUpdate.firstName} ${userToUpdate.lastName} is already a regular user.`
+    	}
+        return output
+    }
+
+    return User.findByIdAndUpdate(data.params.id).then((result, error) => {
+    
+        if (error) {
+            return 'Update Error'
+        }
+        result.isAdmin = false;
+        return result.save().then((nowUser,error)=>{
+        	if (error) {
+            	return 'Error'
+       		} else {
+       			const output = {
+       				'alert!' : `${result.firstName} ${result.lastName} is now a regular user.`,
+       				'>' : nowUser 
+       			}
+
+        		return output;
+        	}
+        })
+    });
+}
+
+
 // Retrieve user details
 
 module.exports.getProfile = (data) =>{
 	return User.findById(data.userId).then(result=>{
 			// result.password = "";
+			// console.log(result)
 			return result;
 
 	});
@@ -449,3 +503,12 @@ module.exports.removeFromCart = (data) =>{
 //             alert("You have deleted " + friend + " as a friend!");
 //         }
 //     }
+
+
+// Retrieve all users
+
+module.exports.getAllUsers = () => {
+	return User.find({}).then(allUsers=>{
+		return allUsers;
+	});
+};
