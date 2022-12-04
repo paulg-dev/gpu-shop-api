@@ -42,6 +42,12 @@ router.get("/active",(req,res)=>{
 
 });
 
+// Route for retrieving all featured products
+
+router.get("/featured",(req,res)=>{
+	productController.getAllFeatured().then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
+
+});
 
 // Route for retrieving a specific product
 

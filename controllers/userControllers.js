@@ -86,7 +86,7 @@ module.exports.loginUser = (reqBody) =>{
 					'>' : `${auth.createAccessToken(result)}`
 				}
 				// return output;
-				return {access:auth.createAccessToken(result), id:result._id, isAdmin:result.isAdmin}
+				return {access:auth.createAccessToken(result), id:result._id, isAdmin:result.isAdmin, email:result.email, firstName:result.firstName, lastName:result.lastName}
 			} else {
 				const output = {
 					'error!' : 'Password is incorrect'

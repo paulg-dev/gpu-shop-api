@@ -35,7 +35,6 @@ router.get("/", auth.verify, (req,res)=>{
 		isAdmin: auth.decode(req.headers.authorization).isAdmin
 	}
 
-
 	orderController.getAllOrders(data).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
 });
 

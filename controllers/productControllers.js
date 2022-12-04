@@ -15,7 +15,7 @@ module.exports.addProduct = (data) => {
 		//  console.log(result);
 		if (result !== null){
 			const output = {
-				'error!': 'Registration failed. Product with similar name already registered.'
+				'err': 'Similar Product Name'
 			}
 			return output;	
 		} else {
@@ -25,6 +25,10 @@ module.exports.addProduct = (data) => {
 				let newProduct = new Product({
 					name : data.product.name,
 					description : data.product.description,
+					imageUrl : data.product.imageUrl,
+					brand : data.product.brand,
+					isListed : data.product.isListed,
+					isFeatured : data.product.isFeatured,
 					price : data.product.price,
 					stocks : data.product.stocks
 				});
@@ -38,11 +42,15 @@ module.exports.addProduct = (data) => {
 							'alert!' : 'Product has been added susccesfully.',
 							'>' : product
 						}
-						return output;
+						// return output;
+						return true;
 					};
 				});
 			} else {
-				return 'Access failed. This function is limited to admin users.';
+				const output = {
+					'err': 'Not an admin'
+				}
+				return output;
 			};
 
 		};
@@ -65,11 +73,19 @@ module.exports.getAllProducts = () => {
 // Retrieve all Active Products
 
 module.exports.getAllActive = () => {
-	return Product.find({isActive:true}).then(activeProducts=>{
+	return Product.find({isListed:true}).then(activeProducts=>{
 		return activeProducts;
 	});
 };
 
+
+// Retrieve all Featured Products
+
+module.exports.getAllFeatured = () => {
+	return Product.find({isFeatured:true}).then(featuredProducts=>{
+		return featuredProducts;
+	});
+};
 
 
 // Retrieving a specific product
@@ -99,7 +115,8 @@ module.exports.getProduct = (reqParams) => {
 				'>': result
 			}
 
-			return output;
+			// return output;
+			return result
 		}
 		
 	});
@@ -114,9 +131,13 @@ module.exports.updateProduct = (data) => {
 	if (data.isAdmin) {
 
 		let updateInfo = {
-			name: data.product.name,
-			description: data.product.description,
-			price: data.product.price,
+			name : data.product.name,
+			description : data.product.description,
+			imageUrl : data.product.imageUrl,
+			brand : data.product.brand,
+			isListed : data.product.isListed,
+			isFeatured : data.product.isFeatured,
+			price : data.product.price,
 			stocks : data.product.stocks
 		};
 
@@ -134,8 +155,8 @@ module.exports.updateProduct = (data) => {
 						'>' : updateInfo,
 						// '<' : updatedProduct
 					};
-
-					return output;
+					// return output;
+					return true;
 				});				
 			};
 			
@@ -152,7 +173,7 @@ module.exports.updateProduct = (data) => {
 module.exports.archiveProduct = (data) => {
 	if (data.isAdmin) {
 	
-			return Product.findByIdAndUpdate(data.params.productId,{isActive:false}).then((product,error)=>{
+			return Product.findByIdAndUpdate(data.params.productId,{isListed:false}).then((product,error)=>{
 				if (error){
 					return 'Error';
 				} else {
@@ -173,7 +194,7 @@ module.exports.archiveProduct = (data) => {
 module.exports.activateProduct = (data) => {
 	if (data.isAdmin) {
 	
-			return Product.findByIdAndUpdate(data.params.productId,{isActive:true}).then((product,error)=>{
+			return Product.findByIdAndUpdate(data.params.productId,{isListed:true}).then((product,error)=>{
 				if (error){
 					return 'Error';
 				} else {
