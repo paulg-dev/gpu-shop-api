@@ -6,24 +6,27 @@ const orderSchema = new mongoose.Schema({
         userId: {
             type: String
         },
-        productSubtotal: {
+        orderSubtotal: {
             type: Number
         },
-        purchasedOn: {
+        orderedOn: {
             type: Date,
-            default: new Date()
+            default: new Date().toLocaleString()
         },
         products: [
             {
                 productId: {
                    type: String,
                 }, 
-                 productName: {
+                productName: {
                    type: String,
                 }, 
                 quantity: {
                     type: Number,
                     default: 1
+                },
+                productSubtotal: {
+                    type: Number
                 }
             }
         ]

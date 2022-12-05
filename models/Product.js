@@ -37,7 +37,7 @@ const productSchema = new mongoose.Schema({
         },
         createdOn: {
             type: Date,
-            default: new Date()
+            default: new Date().toLocaleString("en-US")
         },
         orders: [
             {
@@ -54,7 +54,7 @@ const productSchema = new mongoose.Schema({
                 },
                 orderedOn: {
                     type: Date,
-                    default: new Date()
+                    default: new Date().toLocaleString()
                 }
             }
         ]

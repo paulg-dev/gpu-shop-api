@@ -20,6 +20,7 @@ router.post("/", auth.verify, (req,res)=>{
 	// console.log(auth.decode(req.headers.authorization));
 	// console.log('test')
 	// console.log(data)
+	// console.log(data.order)
 
 	orderController.createOrder(data).then(resultFromController=>res.send(
 		resultFromController)).catch(errorFromController=>res.send(errorFromController));
