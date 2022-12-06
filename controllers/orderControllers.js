@@ -72,9 +72,14 @@ module.exports.createOrder = async (data) => {
 					quantity : quantity
 			}
 
+			product.orders.push(productUpdate);
+
 			product.stocks = (product.stocks - quantity);
 
-			product.orders.push(productUpdate);
+			if (product.stocks === 0) {
+				product.isListed = false
+			}
+
 
 			return product.save().then((product,error)=>{
 				if (error){

@@ -87,6 +87,29 @@ module.exports.getAllFeatured = () => {
 	});
 };
 
+// Retrieve all Nvidia Products
+
+module.exports.getAllNvidia = () => {
+	return Product.find({brand:"nvidia"}).then(nvidiaProducts=>{
+		return nvidiaProducts;
+	});
+};
+
+// Retrieve all Amd Products
+
+module.exports.getAllAmd = () => {
+	return Product.find({brand:"amd"}).then(amdProducts=>{
+		return amdProducts;
+	});
+};
+
+// Retrieve all Intel Products
+
+module.exports.getAllIntel = () => {
+	return Product.find({brand:"intel"}).then(intelProducts=>{
+		return intelProducts;
+	});
+};
 
 // Retrieving a specific product
 
@@ -139,8 +162,24 @@ module.exports.updateProduct = (data) => {
 			isFeatured : data.product.isFeatured,
 			price : data.product.price,
 			stocks : data.product.stocks
+
 		};
 
+		// console.log("test")
+		// console.log(updateInfo)
+		// console.log("test")
+
+		if (data.product.stocks == 0) {
+			updateInfo.isListed = false
+		}
+		else {
+			updateInfo.isListed = true
+		}
+
+		// console.log("test")
+		// console.log(data.product.isListed)
+		// console.log(updateInfo.isListed)
+		// console.log("test")
 
 		return Product.findByIdAndUpdate(data.params.productId, updateInfo).then((product,error)=>{
 			
@@ -200,6 +239,47 @@ module.exports.activateProduct = (data) => {
 				} else {
 					const output = {
 						'alert!': `Product ${product.name} been listed again.`,
+					}
+
+					return output;
+				}
+			})
+	}
+};
+
+
+// Un-Feature a product
+
+module.exports.removeFeaturedProduct = (data) => {
+	if (data.isAdmin) {
+	
+			return Product.findByIdAndUpdate(data.params.productId,{isFeatured:false}).then((product,error)=>{
+				if (error){
+					return 'Error';
+				} else {
+					const output = {
+						'alert!': `Product ${product.name} has been un-featured.`
+					}
+
+					return output;
+				}
+			})
+	}
+};
+
+
+
+// Activate a product
+
+module.exports.addFeaturedProduct = (data) => {
+	if (data.isAdmin) {
+	
+			return Product.findByIdAndUpdate(data.params.productId,{isFeatured:true}).then((product,error)=>{
+				if (error){
+					return 'Error';
+				} else {
+					const output = {
+						'alert!': `Product ${product.name} been featured.`,
 					}
 
 					return output;

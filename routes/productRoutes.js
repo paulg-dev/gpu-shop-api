@@ -42,6 +42,27 @@ router.get("/active",(req,res)=>{
 
 });
 
+// Route for retrieving all nvidia products
+
+router.get("/nvidia",(req,res)=>{
+	productController.getAllNvidia().then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
+
+});
+
+// Route for retrieving all amd products
+
+router.get("/amd",(req,res)=>{
+	productController.getAllAmd().then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
+
+});
+
+// Route for retrieving all intel products
+
+router.get("/intel",(req,res)=>{
+	productController.getAllIntel().then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
+
+});
+
 // Route for retrieving all featured products
 
 router.get("/featured",(req,res)=>{
@@ -93,6 +114,32 @@ router.put("/activate/:productId", auth.verify, (req,res)=>{
 	}
 
 	productController.activateProduct(data).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
+});
+
+
+// Route for removing product from Featured List
+
+router.put("/removeFeatured/:productId", auth.verify, (req,res)=>{
+
+	const data = {
+		params: req.params,
+		isAdmin: auth.decode(req.headers.authorization).isAdmin
+	}
+
+	productController.removeFeaturedProduct(data).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
+});
+
+
+// Route for adding product to Featured List
+
+router.put("/addFeatured/:productId", auth.verify, (req,res)=>{
+
+	const data = {
+		params: req.params,
+		isAdmin: auth.decode(req.headers.authorization).isAdmin
+	}
+
+	productController.addFeaturedProduct(data).then(resultFromController=>res.send(resultFromController)).catch(errorFromController=>res.send(errorFromController));
 });
 
 
