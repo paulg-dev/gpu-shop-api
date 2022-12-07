@@ -148,7 +148,8 @@ module.exports.getUserOrders = (data) => {
 			'>' : allUserOrders
 		}
 
-		return output;
+		// return output;
+		return allUserOrders;
 	});
 
 	}

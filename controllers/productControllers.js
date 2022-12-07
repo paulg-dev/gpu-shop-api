@@ -90,7 +90,7 @@ module.exports.getAllFeatured = () => {
 // Retrieve all Nvidia Products
 
 module.exports.getAllNvidia = () => {
-	return Product.find({brand:"nvidia"}).then(nvidiaProducts=>{
+	return Product.find({isListed:true, brand:"nvidia"}).then(nvidiaProducts=>{
 		return nvidiaProducts;
 	});
 };
@@ -98,7 +98,7 @@ module.exports.getAllNvidia = () => {
 // Retrieve all Amd Products
 
 module.exports.getAllAmd = () => {
-	return Product.find({brand:"amd"}).then(amdProducts=>{
+	return Product.find({isListed:true, brand:"amd"}).then(amdProducts=>{
 		return amdProducts;
 	});
 };
@@ -106,7 +106,7 @@ module.exports.getAllAmd = () => {
 // Retrieve all Intel Products
 
 module.exports.getAllIntel = () => {
-	return Product.find({brand:"intel"}).then(intelProducts=>{
+	return Product.find({isListed:true, brand:"intel"}).then(intelProducts=>{
 		return intelProducts;
 	});
 };

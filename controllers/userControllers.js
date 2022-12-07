@@ -280,7 +280,8 @@ module.exports.addToCart = (data, res) => {
     					'alert!' : 'Item/s successfully added to cart.',
     					'>' : toCart
     				}
-        			return output;		 
+        			// return output;		 
+        			return true;
     				
    				}
    			}	
@@ -307,13 +308,13 @@ module.exports.viewCart = (data) =>{
 
 			// console.log(totalAmount)
 
-			const output = {
-				'alert!' : `Here is what's currently in your cart ${result.firstName}`,
-				'>' : result.cart,
-				'totalAmount' : totalAmount
-			}
+			// const output = {
+			// 	'alert!' : `Here is what's currently in your cart ${result.firstName}`,
+			// 	'>' : result.cart,
+			// 	'totalAmount' : totalAmount
+			// }
 
-			return output;	
+			return result.cart;	
 			
 	});
 };
@@ -389,56 +390,6 @@ module.exports.updateCart = async (data) =>{
         })
     });
 
-
-
-	// return User.findOne({_id:data.authId}).then(result=>{
-
-	// //  console.log(result)
-	// const userId = data.authId
-
-	// 		let toUpdate = {
- //        			// productId: product._id,
- //        			// productName: data.product.name,
- //        			quantity:data.product.quantity,
-	//         		// price: result.product.price,
-	//         } 
-
-	//         console.log(toUpdate)
-	//         console.log(result.cart.length)
-
-	//         for (let i = 0; i < result.cart.length; i++)
-
-	//         if (data.params.productId == result.cart[i].productId) {
-
-	//         	result.cart[i].quantity = data.product.quantity
-	//         }
-
-	//         let cartUpdate = User.findByIdAndUpdate(resul.cart.).then(user => {
- //        					user.cart.push(toUpdate);
-
- //        			let addedtoCart = user.save().then(result =>{
-
- //        				// console.log(result)		 		
-
- //        			})
- //        	});		
-
-	// 		let totalAmount = 0;
-
-	// 		result.cart.forEach(item => {
-
-	// 			totalAmount += item.subTotal
-	// 		})
-				
-	// 		const output = {
-	// 			'alert!' : `Quantity for has been succesfully updated`,
-	// 			'>' : result.cart,
-	// 			'totalAmount' : totalAmount
-	// 		}
-
-	// 		return output;	
-			
-	// });
 };
 
 
